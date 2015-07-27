@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feitai.web.dao.LoginLogDAO">
+
+	<insert id="insert" parameterType="LoginLogEObj" keyProperty="LOGIN_LOG_ID">
+		INSERT INTO FT_LOGIN_LOG(
+			USER_ID,
+			IP,
+			LOGIN_DT
+		) VALUES (
+			#{userId},
+			#{ip},
+			#{loginDt}
+		)
+	</insert>
+</mapper>

@@ -1,0 +1,56 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+      http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+      http://www.springframework.org/schema/context
+      http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+	<!-- 定义目标bean和bean中的方法 -->
+	<!-- =====================日常任务job========================== -->
+	<bean id="TestJob" class="com.feitai.batch.job.TestJob">
+		<property name="scheduler" ref="SchedulerFactory"></property>
+	</bean>
+	
+	<bean id="TestJobMethod"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="TestJob" />
+		</property>
+		<property name="targetMethod">  <!-- 要执行的方法名称 -->
+			<value>execute</value>
+		</property>
+		<!-- false表示job不会并发执行，默认为true-->
+        <property name="concurrent" value="false" />
+	</bean>
+
+	<!-- ======================== 调度触发器 ======================== -->
+	<bean id="TestTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="group" value="Test"></property>
+		<property name="jobDetail" ref="TestJobMethod"></property>
+		<property name="cronExpression" value="${batch.task.test.schedule}"></property>
+	</bean> 
+
+	<!-- ======================== 调度工厂 ======================== -->
+	<bean id="SchedulerFactory"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="TestTrigger" />
+			</list>
+		</property>
+<!-- 		<property name="taskExecutor"> -->
+<!-- 		    <ref bean="batch-scheduler-threadpool" /> -->
+<!-- 		</property> -->
+	</bean>
+	
+<!-- 	<bean id="batch-scheduler-threadpool" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor"> -->
+<!-- 		  <property name="corePoolSize" value="5" /> -->
+<!-- 		  <property name="maxPoolSize" value="10" /> -->
+<!-- 		  <property name="queueCapacity" value="25" /> -->
+<!-- 	</bean> -->
+	
+</beans>

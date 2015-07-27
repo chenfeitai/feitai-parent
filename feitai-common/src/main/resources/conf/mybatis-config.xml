@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration 
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<!-- mybatis-config对元素放置位置有要求 -->
+<configuration>
+	<!-- 命名空间 -->
+	<typeAliases>
+		<!-- web -->
+		<typeAlias alias="UserEObj" type="com.feitai.common.model.UserEObj" />
+		<typeAlias alias="LoginLogEObj" type="com.feitai.common.model.LoginLogEObj" />
+		<typeAlias alias="MainPostEObj" type="com.feitai.common.model.MainPostEObj" />
+		<typeAlias alias="PostEObj" type="com.feitai.common.model.PostEObj" />
+		<typeAlias alias="TopicEObj" type="com.feitai.common.model.TopicEObj" />
+		<typeAlias alias="BoardEObj" type="com.feitai.common.model.BoardEObj" />
+		<!-- batch -->
+	</typeAliases>
+	<plugins>
+	    <plugin interceptor="com.feitai.common.page.PageInterceptor"></plugin>
+	</plugins>
+	<!-- 映射map -->
+	<mappers>
+	</mappers>
+</configuration>

@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feitai.web.dao.TopicDAO">
+    
+    <resultMap id="TopicResMap" type="TopicEObj">
+        <result property="id" column="TOPIC_ID"/>
+        <result property="topicTitle" column="TOPIC_TITLE"/>
+        <result property="createTime" column="CREATE_TIME"/>
+        <result property="lastPostDt" column="LAST_POST_DT"/>
+        <result property="views" column="TOPIC_VIEWS"/>
+        <result property="replies" column="TOPIC_REPLIES"/>
+        <result property="digest" column="DIGEST"/>
+        <result property="boardId" column="BOARD_ID"/>
+        <result property="userId" column="USER_ID"/>
+    </resultMap>
+    
+    <sql id="TopicDBCol">
+        TOPIC_ID,
+        TOPIC_TITLE,
+        CREATE_TIME,
+        LAST_POST_DT,
+        TOPIC_VIEWS,
+        TOPIC_REPLIES,
+        DIGEST,
+        BOARD_ID,
+        USER_ID
+    </sql>
+
+	<insert id="insert" parameterType="TopicEObj" keyProperty="TOPIC_ID">
+		INSERT INTO FT_TOPIC(
+		<trim suffix="" suffixOverrides="," >
+		    <if test="id !=null and id !=''">TOPIC_ID,</if>
+			<if test="topicTitle !=null and topicTitle !=''">TOPIC_TITLE,</if>
+			<if test="createTime !=null and createTime !=''">CREATE_TIME,</if>
+			<if test="lastPostDt !=null and lastPostDt !=''">LAST_POST_DT,</if>
+			<if test="views !=null and views !=''">TOPIC_VIEWS,</if>
+			<if test="replies !=null and replies !=''">TOPIC_REPLIES,</if>
+			<if test="digest !=null and digest !=''">DIGEST,</if>
+			<if test="boardId !=null and boardId !=''">BOARD_ID,</if>
+			<if test="userId !=null and userId !=''">USER_ID,</if>
+		</trim>
+		) VALUES (
+		<trim suffix="" suffixOverrides="," >
+		   	<if test="id !=null and id !=''">#{id},</if>
+			<if test="topicTitle !=null and topicTitle !=''">#{topicTitle},</if>
+			<if test="createTime !=null and createTime !=''">#{createTime},</if>
+			<if test="lastPostDt !=null and lastPostDt !=''">#{lastPostDt},</if>
+			<if test="views !=null and views !=''">#{views},</if>
+			<if test="replies !=null and replies !=''">#{replies},</if>
+			<if test="digest !=null and digest !=''">#{digest},</if>
+			<if test="boardId !=null and boardId !=''">#{boardId},</if>
+			<if test="userId !=null and userId !=''">#{userId},</if>
+		</trim>
+		)
+	</insert>
+	
+	<select id="get" parameterType="string" resultMap="TopicResMap">
+		SELECT 
+			<include refid="TopicDBCol"></include>
+		FROM 
+			FT_TOPIC 
+		WHERE
+            TOPIC_ID = #{id}  
+	</select>
+	
+	<update id="update" parameterType="TopicEObj">
+	    UPDATE
+	    	FT_TOPIC
+	    <trim prefix="SET" suffixOverrides=",">  
+	       	<if test="id !=null and id !=''">TOPIC_ID=#{id},</if>
+			<if test="topicTitle !=null and topicTitle !=''">TOPIC_TITLE=#{topicTitle},</if>
+			<if test="createTime !=null and createTime !=''">CREATE_TIME=#{createTime},</if>
+			<if test="lastPostDt !=null and lastPostDt !=''">LAST_POST_DT=#{lastPostDt},</if>
+			<if test="views !=null and views !=''">TOPIC_VIEWS=#{views},</if>
+			<if test="replies !=null and replies !=''">TOPIC_REPLIES=#{replies},</if>
+			<if test="digest !=null and digest !=''">DIGEST=#{digest},</if>
+			<if test="boardId !=null and boardId !=''">BOARD_ID=#{boardId},</if>
+	    </trim>  
+	    WHERE 
+	    	TOPIC_ID = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="TopicEObj">
+	    DELETE FROM FT_TOPIC WHERE TOPIC_ID = #{id}
+	</delete>
+</mapper>

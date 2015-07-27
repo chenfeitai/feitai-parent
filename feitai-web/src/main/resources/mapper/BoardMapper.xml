@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feitai.web.dao.BoardDAO">
+    
+    <resultMap id="BoardResMap" type="BoardEObj">
+		 <result property="id" column="BOARD_ID"/>
+		 <result property="name" column="BOARD_NAME"/>
+		 <result property="desc" column="BOARD_DESC"/>
+		 <result property="topicNum" column="TOPIC_NUM"/>
+    </resultMap>
+    
+
+	<insert id="insert" parameterType="BoardEObj" keyProperty="BOARD_ID">
+		INSERT INTO FT_BOARD(
+			BOARD_ID,
+			BOARD_NAME,
+			<if test="desc != null and desc != '' ">  
+				BOARD_DESC,
+			</if>
+			TOPIC_NUM
+		) VALUES (
+			#{id},
+			#{name},
+			<if test="desc != null and desc != '' ">  
+				#{desc},
+			</if>
+			#{topicNum}
+		)
+	</insert>
+	
+	<select id="get" parameterType="string" resultMap="BoardResMap">
+	    SELECT 
+	    	BOARD_ID,
+			BOARD_NAME,
+			BOARD_DESC,
+			TOPIC_NUM
+		FROM
+			FT_BOARD
+		WHERE
+            BOARD_ID = #{id}  
+	</select>
+	
+	<select id="queryBoardCount" resultType="int">
+	    SELECT 
+	    	COUNT(BOARD_ID)
+		FROM
+			FT_BOARD
+	</select>
+	
+	<update id="update" parameterType="BoardEObj">
+	    UPDATE
+	    	FT_BOARD
+	    <trim prefix="SET" suffixOverrides=",">
+        	<if test="name != null and name != ''">  
+				BOARD_NAME=#{name},
+			</if> 
+			<if test="desc != null and desc != ''">  
+				BOARD_DESC=#{desc},
+			</if> 
+			<if test="topicNum != null and topicNum != ''">  
+				TOPIC_NUM=#{topicNum},
+			</if> 
+     	</trim>   
+	    WHERE 
+	    	BOARD_ID = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="BoardEObj">
+	    DELETE FROM FT_BOARD WHERE BOARD_ID = #{id}
+	</delete>
+</mapper>

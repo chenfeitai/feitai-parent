@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_4.xsd"
+	id="WebApp_ID" version="2.4">
+	<display-name>Archetype Created Web Application</display-name>
+
+	<!-- 读取spring配置文件 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+		    classpath:conf/spring-common.xml;
+			classpath:conf/web-config.xml
+        </param-value>
+	</context-param>
+	<!-- 设置路径变量值 -->
+	<context-param>
+		<param-name>webAppRootKey</param-name>
+		<param-value>feitai-web.root</param-value>
+	</context-param>
+
+
+	<!-- Spring字符集过滤器 -->
+	<filter>
+		<filter-name>SpringEncodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>SpringEncodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!-- springMVC核心配置 -->
+	<servlet>
+		<servlet-name>DispatcherServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:conf/spring-mvc.xml</param-value>
+		</init-param>
+		<init-param>
+			<param-name>detectAllHandlerExceptionResolvers</param-name> <!--取消其自动注册的异常解析器-->
+			<param-value>false</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>DispatcherServlet</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+	
+	<jsp-config>
+    	<taglib>
+    	    <taglib-uri>http//java.sun.com/jsp/jstl/core</taglib-uri>
+    	    <taglib-location>/WEB-INF/tlds/c.tld</taglib-location>
+    	</taglib>
+    	<taglib>
+    	    <taglib-uri>http//java.sun.com/jsp/jstl/fmt</taglib-uri>
+    	    <taglib-location>/WEB-INF/tlds/fmt.tld</taglib-location>
+    	</taglib>
+	</jsp-config>
+</web-app>

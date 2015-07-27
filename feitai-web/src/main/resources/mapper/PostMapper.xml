@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feitai.web.dao.PostDAO">
+    
+    <resultMap id="PostResMap" type="PostEObj">
+        <result property="id" column="POST_ID"/>
+        <result property="topicId" column="TOPIC_ID"/>
+        <result property="boardId" column="BOARD_ID"/>
+        <result property="postType" column="POST_TYPE"/>
+        <result property="postTitle" column="POST_TITLE"/>
+        <result property="postText" column="POST_TEXT"/>
+        <result property="createTime" column="CREATE_TIME"/>
+    </resultMap>
+    
+    <sql id="PostDBCol">
+        POST_ID,
+        TOPIC_ID,
+        USER_ID,
+        BOARD_ID,
+        POST_TYPE,
+        POST_TITLE,
+        POST_TEXT,
+        CREATE_TIME
+    </sql>
+
+	<insert id="insert" parameterType="PostEObj" keyProperty="POST_ID">
+		INSERT INTO FT_POST(
+		<trim suffix="" suffixOverrides="," >
+		    <if test="id !=null and id !=''">POST_ID,</if>
+			<if test="topicId !=null and topicId !=''">TOPIC_ID,</if>
+			<if test="boardId !=null and boardId !=''">BOARD_ID,</if>
+			<if test="userId !=null and userId !=''">USER_ID,</if>
+			<if test="postType !=null and postType !=''">POST_TYPE,</if>
+			<if test="postTitle !=null and postTitle !=''">POST_TITLE,</if>
+			<if test="postText !=null and postText !=''">POST_TEXT,</if>
+			<if test="createTime !=null and createTime !=''">CREATE_TIME,</if>
+		</trim>
+		) VALUES (
+		<trim suffix="" suffixOverrides="," >
+		    <if test="id !=null and id !=''">#{id},</if>
+			<if test="topicId !=null and topicId !=''">#{topicId},</if>
+			<if test="boardId !=null and boardId !=''">#{boardId},</if>
+			<if test="userId !=null and userId !=''">#{userId},</if>
+			<if test="postType !=null and postType !=''">#{postType},</if>
+			<if test="postTitle !=null and postTitle !=''">#{postTitle},</if>
+			<if test="postText !=null and postText !=''">#{postText},</if>
+			<if test="createTime !=null and createTime !=''">#{createTime},</if>
+		</trim>
+		)
+	</insert>
+	
+	<select id="get" parameterType="string" resultMap="PostResMap">
+		SELECT 
+			<include refid="PostDBCol"></include>
+		FROM 
+			FT_POST 
+		WHERE
+            POST_ID = #{id}  
+	</select>
+	
+	<update id="update" parameterType="PostEObj">
+	    UPDATE
+	    	FT_POST
+	    <trim prefix="SET" suffixOverrides=",">  
+	        <if test="topicId !=null and topicId !=''">
+	            TOPIC_ID=#{topicId}
+	        </if>
+			<if test="boardId !=null and boardId !=''">
+			    BOARD_ID=#{boardId}
+			</if>
+			<if test="postType !=null and postType !=''">
+			    POST_TYPE=#{postType}
+			</if>
+			<if test="postTitle !=null and postTitle !=''">
+			    POST_TITLE=#{postTitle}
+			</if>
+			<if test="postText !=null and postText !=''">
+			    POST_TEXT=#{postText}
+			</if>
+	    </trim>  
+	    WHERE 
+	    	POST_ID = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="PostEObj">
+	    DELETE FROM FT_POST WHERE POST_ID = #{id}
+	</delete>
+	
+	<delete id="deleteTopicPosts" parameterType="string">
+	    DELETE FROM FT_POST WHERE TOPIC_ID = #{topicId}
+	</delete>
+</mapper>

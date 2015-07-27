@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.feitai.web.dao.UserDAO">
+    
+    <resultMap id="UserResMap" type="UserEObj">
+        <result property="id" column="USER_ID"/>
+        <result property="name" column="USER_NAME"/>
+        <result property="password" column="USER_PWD"/>
+        <result property="credits" column="USER_CREDITS"/>
+        <result property="type" column="USER_TYPE"/>
+        <result property="locked" column="LOCKED"/>
+        <result property="lastVisitDt" column="LAST_VISIT_DT"/>
+        <result property="lastIp" column="LAST_IP"/>
+    </resultMap>
+    
+    <sql id="UserDBCol">
+        USER_ID,
+        USER_NAME,
+        USER_PWD,
+        USER_CREDITS,
+        LAST_VISIT_DT,
+        LAST_IP
+    </sql>
+
+	<insert id="insert" parameterType="UserEObj" keyProperty="USER_ID">
+		INSERT INTO FT_USER(
+		<trim suffix="" suffixOverrides="," >
+		    <if test="id !=null and id !=''">USER_ID,</if>
+			<if test="name !=null and name !=''">USER_NAME,</if>
+			<if test="password !=null and password !=''">USER_PWD,</if>
+			<if test="credits !=null and credits !=''">USER_CREDITS,</if>
+			<if test="type !=null and type !=''">USER_TYPE,</if>
+			<if test="locked !=null and locked !=''">LOCKED,</if>
+		</trim>
+		) VALUES (
+		<trim suffix="" suffixOverrides="," >
+		    <if test="id !=null and id !=''">#{id},</if>
+			<if test="name !=null and name !=''">#{name},</if>
+			<if test="password !=null and password !=''">#{password},</if>
+			<if test="credits !=null and credits !=''">#{credits},</if>
+			<if test="type !=null and type !=''">#{type},</if>
+			<if test="locked !=null and locked !=''">#{locked},</if>
+		</trim>
+		)
+	</insert>
+	
+	<select id="queryMatchCount" parameterType="UserEObj" resultType="_integer">
+		SELECT 
+			COUNT(*) 
+		FROM 
+			FT_USER 
+		WHERE 
+			USER_NAME=#{name} 
+		AND 
+			USER_PWD=#{password}
+	</select>
+	
+	<select id="queryUserByName" parameterType="UserEObj" resultMap="UserResMap">
+		SELECT 
+			<include refid="UserDBCol"></include>
+		FROM 
+			FT_USER 
+		WHERE
+			USER_NAME=#{name}
+	</select>
+	
+	<select id="get" parameterType="string" resultMap="UserResMap">
+		SELECT 
+			<include refid="UserDBCol"></include>
+		FROM 
+			FT_USER 
+		WHERE
+            USER_ID = #{id}  
+	</select>
+	
+	<update id="update" parameterType="UserEObj">
+	    UPDATE
+	    	FT_USER
+	    <trim prefix="SET" suffixOverrides=",">  
+	        <if test="password != null and password != '' ">  
+	            USER_PWD = #{password},  
+	        </if>  
+	        <if test="credits != null and credits != ''">  
+	            USER_CREDITS = #{credits},  
+	        </if>  
+	        <if test="lastVisitDt != null and lastVisitDt != ''">  
+	            LAST_VISIT_DT = #{lastVisitDt},  
+	        </if>  
+	        <if test="lastIp != '' ">  
+	            LAST_IP = #{lastIp},  
+	        </if>  
+	    </trim>  
+	    WHERE 
+	    	USER_ID = #{id}
+	</update>
+	
+	<delete id="delete" parameterType="UserEObj">
+	    DELETE FROM FT_USER WHERE USER_ID = #{id}
+	</delete>
+</mapper>
